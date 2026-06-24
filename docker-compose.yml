@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: sdps
+      POSTGRES_USER: sdps
+      POSTGRES_PASSWORD: sdpspass123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sdps -d sdps"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://sdps:sdpspass123@postgres:5432/sdps
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: sdps-dev-secret-key-change-in-prod!
+      ENCRYPTION_KEY: dGhpcyBpcyBhIDMyLWJ5dGUgZW5jcnlwdGlvbg==
+      APP_ENV: development
+      ACCESS_TOKEN_EXPIRE_MINUTES: "15"
+      REFRESH_TOKEN_EXPIRE_HOURS: "24"
+      FRAUD_THRESHOLD_LOW: "0.40"
+      FRAUD_THRESHOLD_HIGH: "0.75"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:
