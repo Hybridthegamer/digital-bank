@@ -41,8 +41,9 @@ def get_redis():
     return _redis_client
 
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+def hash_password(password):
+    return pwd_context.hash(password[:72])
+
 
 
 def verify_password(plain: str, hashed: str) -> bool:

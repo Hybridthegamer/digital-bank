@@ -5,7 +5,8 @@ alembic==1.13.1
 psycopg2-binary==2.9.9
 redis==5.0.4
 python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
+passlib>=1.7.4
+bcrypt>=4.1.0
 cryptography==42.0.7
 pyotp==2.9.0
 scikit-learn==1.4.2
