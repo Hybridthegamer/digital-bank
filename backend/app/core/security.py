@@ -1,16 +1,27 @@
 import uuid
-import redis as redis_lib
+import redis as redis_lib  # type: ignore[import]
 from datetime import datetime, timedelta, timezone
+from importlib import import_module
 from typing import Optional
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.backends import default_backend
-from jose import jwt, JWTError
-from passlib.context import CryptContext
-import pyotp
+from cryptography.hazmat.primitives import serialization  # type: ignore[import]
+from cryptography.hazmat.primitives.asymmetric import rsa  # type: ignore[import]
+from cryptography.hazmat.backends import default_backend  # type: ignore[import]
+from jose import jwt # type: ignore
+from jose.exceptions import JWTError # type: ignore
+from passlib.context import CryptContext  # type: ignore[import]
 from app.core.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12)
+
+
+def _get_pyotp():
+    try:
+        return import_module("pyotp")
+    except ImportError as exc:
+        raise ImportError("pyotp is required for TOTP operations") from exc
+
+# Import pyotp module (raise if missing)
+pyotp = _get_pyotp()
 
 # RSA key generation (done once at module level for dev; load from env/secret in prod)
 _private_key = rsa.generate_private_key(
