@@ -67,6 +67,49 @@ export interface Card {
   created_at: string;
 }
 
+export interface GiftCard {
+  id: string;
+  code: string;
+  amount: string;
+  currency: string;
+  denomination_label: string;
+  is_redeemed: boolean;
+  redeemed_at: string | null;
+  expires_at: string | null;
+  created_at: string;
+}
+
+export interface CryptoHolding {
+  symbol: string;
+  name: string;
+  icon: string;
+  balance: string;
+  mid_ngn: string;
+  ngn_value: string;
+  change_24h_pct: number;
+}
+
+export interface CryptoTransaction {
+  id: string;
+  symbol: string;
+  transaction_type: string;
+  crypto_amount: string;
+  ngn_amount: string;
+  rate: string;
+  status: string;
+  created_at: string;
+}
+
+export interface CryptoRate {
+  symbol: string;
+  name: string;
+  icon: string;
+  mid_ngn: number;
+  buy_ngn: number;
+  sell_ngn: number;
+  change_24h_pct: number;
+}
+
 export interface ApiError {
   type?: string;
   title?: string;
