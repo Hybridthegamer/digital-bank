@@ -5,10 +5,10 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from app.db.session import engine
 from app.db.base import Base
-from app.api import auth, accounts, payments, cards, admin, health
+from app.api import auth, accounts, payments, cards, admin, health, giftcards, crypto
 
 # Import all models so Alembic detects them
-from app.models import user, account, transaction, payment_card, token_vault, audit_log, fraud_alert  # noqa
+from app.models import user, account, transaction, payment_card, token_vault, audit_log, fraud_alert, gift_card, crypto_holding, crypto_transaction  # noqa
 
 
 @asynccontextmanager
@@ -71,3 +71,5 @@ app.include_router(accounts.router, prefix=PREFIX)
 app.include_router(payments.router, prefix=PREFIX)
 app.include_router(cards.router, prefix=PREFIX)
 app.include_router(admin.router, prefix=PREFIX)
+app.include_router(giftcards.router, prefix=PREFIX)
+app.include_router(crypto.router, prefix=PREFIX)

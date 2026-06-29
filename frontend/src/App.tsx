@@ -9,6 +9,8 @@ import History from './pages/History';
 import Cards from './pages/Cards';
 import MFASetup from './pages/MFASetup';
 import Admin from './pages/Admin';
+import Crypto from './pages/Crypto';
+import GiftCards from './pages/GiftCards';
 
 export default function App() {
   return (
@@ -28,6 +30,12 @@ export default function App() {
         } />
         <Route path="/cards" element={
           <ProtectedRoute><Layout><Cards /></Layout></ProtectedRoute>
+        } />
+        <Route path="/crypto" element={
+          <ProtectedRoute><Layout><Crypto /></Layout></ProtectedRoute>
+        } />
+        <Route path="/giftcards" element={
+          <ProtectedRoute><Layout><GiftCards /></Layout></ProtectedRoute>
         } />
         <Route path="/mfa-setup" element={
           <ProtectedRoute><Layout><MFASetup /></Layout></ProtectedRoute>

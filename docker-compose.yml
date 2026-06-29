@@ -11,6 +11,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U sdps -d sdps"]
       interval: 5s
@@ -21,6 +22,7 @@ services:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -41,6 +43,7 @@ services:
       FRAUD_THRESHOLD_HIGH: "0.75"
     ports:
       - "8000:8000"
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
@@ -51,8 +54,11 @@ services:
 
   frontend:
     build: ./frontend
+    environment:
+      VITE_API_URL: http://localhost:8000
     ports:
       - "5173:5173"
+    restart: unless-stopped
     depends_on:
       - backend
     volumes:

@@ -12,6 +12,10 @@ export default {
           900: '#1e3a8a',
         },
       },
+      opacity: {
+        3: '0.03',
+        8: '0.08',
+      },
     },
   },
   plugins: [],

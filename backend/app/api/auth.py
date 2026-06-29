@@ -32,6 +32,8 @@ def register(payload: RegisterRequest, request: Request, db: Session = Depends(g
         try:
             if encryption_service.decrypt(u.email) == payload.email.lower():
                 raise HTTPException(status_code=409, detail="Email already registered")
+        except HTTPException:
+            raise
         except Exception:
             pass
 
